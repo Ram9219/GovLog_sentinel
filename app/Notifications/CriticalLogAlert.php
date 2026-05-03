@@ -3,6 +3,8 @@
 namespace App\Notifications;
 
 use App\Models\ServerLog;
+use App\Notifications\Channels\TwilioSmsChannel;
+use App\Notifications\Channels\WhatsAppCloudChannel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
@@ -18,11 +20,28 @@ class CriticalLogAlert extends Notification
         $this->log = $log;
     }
 
+    /**
+     * Determine which channels to use based on severity
+     */
     public function via(object $notifiable): array
     {
-        return ['mail', 'database'];
+        $channels = ['mail', 'database'];
+
+        // Add SMS for critical/emergency if Twilio is configured
+        if (
+            in_array($this->log->severity, ['critical', 'emergency']) &&
+            !empty(config('twilio.sid')) &&
+            !str_contains(config('twilio.sid'), 'your_')
+        ) {
+            $channels[] = TwilioSmsChannel::class;
+        }
+
+        return $channels;
     }
 
+    /**
+     * Email notification
+     */
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
@@ -40,6 +59,48 @@ class CriticalLogAlert extends Notification
             ->salutation('— GovLog Sentinel Monitoring System');
     }
 
+    /**
+     * SMS notification via Twilio
+     */
+    public function toSms(object $notifiable): string
+    {
+        return sprintf(
+            "[%s] %s\nAction: %s\nIP: %s\nTime: %s",
+            strtoupper($this->log->severity),
+            substr($this->log->message, 0, 120),
+            $this->log->action_type,
+            $this->log->source_ip,
+            $this->log->created_at->format('Y-m-d H:i:s')
+        );
+    }
+
+    /**
+     * WhatsApp notification
+     */
+    public function toWhatsApp(object $notifiable): string
+    {
+        return sprintf(
+            "🚨 *%s ALERT*\n\n*Action:* %s\n*Message:* %s\n*IP:* %s\n*Classification:* %s\n*Time:* %s",
+            strtoupper($this->log->severity),
+            $this->log->action_type,
+            $this->log->message,
+            $this->log->source_ip,
+            $this->log->classification,
+            $this->log->created_at->format('Y-m-d H:i:s')
+        );
+    }
+
+    /**
+     * Check if this is an emergency-level alert
+     */
+    public function isEmergency(): bool
+    {
+        return $this->log->severity === 'emergency';
+    }
+
+    /**
+     * Database notification
+     */
     public function toArray(object $notifiable): array
     {
         return [

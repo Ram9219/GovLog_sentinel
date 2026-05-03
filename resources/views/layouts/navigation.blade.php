@@ -5,7 +5,7 @@
             <div class="flex items-center gap-8">
                 <!-- Logo with Home Link -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('landing') }}" class="flex items-center gap-2 hover:opacity-80 transition">
+                    <a href="{{ route('landing') }}" class="flex items-center gap-2 hover:opacity-80 transition" title="Go to landing page">
                         <span class="text-2xl">🛡️</span>
                         <span class="text-white font-bold text-lg hidden sm:inline">GovLog Sentinel</span>
                     </a>

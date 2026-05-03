@@ -44,6 +44,25 @@
             <x-input-error :messages="$errors->get('email')" class="mt-2 text-red-600 text-sm" />
         </div>
 
+        <!-- Phone Number -->
+        <div>
+            <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">
+                📱 Phone Number
+            </label>
+            <x-text-input 
+                id="phone" 
+                class="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition" 
+                type="tel" 
+                name="phone" 
+                :value="old('phone')" 
+                required 
+                autocomplete="tel"
+                placeholder="+91XXXXXXXXXX" 
+            />
+            <p class="mt-1 text-xs text-gray-500">Use the number where SMS alerts should be delivered.</p>
+            <x-input-error :messages="$errors->get('phone')" class="mt-2 text-red-600 text-sm" />
+        </div>
+
         <!-- Password -->
         <div>
             <label for="password" class="block text-sm font-medium text-gray-700 mb-2">

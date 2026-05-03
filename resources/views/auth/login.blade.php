@@ -10,6 +10,24 @@
     <form method="POST" action="{{ route('login') }}" class="space-y-5">
         @csrf
 
+        <div>
+            <label for="role" class="block text-sm font-medium text-gray-700 mb-2">
+                👥 Login As
+            </label>
+            <select
+                id="role"
+                name="role"
+                class="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition bg-white"
+                required
+            >
+                <option value="" disabled {{ old('role') ? '' : 'selected' }}>Select your role</option>
+                <option value="admin" @selected(old('role') === 'admin')>Admin</option>
+                <option value="operator" @selected(old('role') === 'operator')>Operator</option>
+                <option value="viewer" @selected(old('role') === 'viewer')>Viewer</option>
+            </select>
+            <x-input-error :messages="$errors->get('role')" class="mt-2 text-red-600 text-sm" />
+        </div>
+
         <!-- Email Address -->
         <div>
             <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
@@ -94,7 +112,7 @@
     <!-- Info Box -->
     <div class="mt-6 p-3 bg-blue-50 border border-blue-200 rounded-lg">
         <p class="text-xs text-blue-700">
-            <span class="font-semibold">💡 Tip:</span> Use your government-issued email address for login.
+            <span class="font-semibold">💡 Tip:</span> Choose the role that matches your account before signing in.
         </p>
     </div>
 </x-guest-layout>

@@ -28,6 +28,10 @@
                                 <span class="text-xs text-gray-500">Email</span>
                                 <p class="text-sm text-gray-700 dark:text-gray-300">{{ Auth::user()->email }}</p>
                             </div>
+                            <div>
+                                <span class="text-xs text-gray-500">Phone</span>
+                                <p class="text-sm text-gray-700 dark:text-gray-300">{{ Auth::user()->phone_number ?? 'Not provided' }}</p>
+                            </div>
                         </div>
                     </div>
 

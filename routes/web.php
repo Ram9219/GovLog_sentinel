@@ -23,7 +23,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     
     // User Dashboard (Default Breeze)
     Route::get('/dashboard', function () {
-        return redirect()->route('admin.dashboard');
+        $user = request()->user();
+
+        if ($user->isAdmin() || $user->isOperator()) {
+            return redirect()->route('admin.dashboard');
+        }
+
+        return view('dashboard');
     })->name('dashboard');
     
     // Profile Management
