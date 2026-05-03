@@ -1,0 +1,28 @@
+┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
+│     users       │────<│   server_logs   │>────│notification_queue│
+├─────────────────┤     ├─────────────────┤     ├─────────────────┤
+│ id              │     │ id              │     │ id              │
+│ name            │     │ log_entry_id    │     │ log_id (FK)     │
+│ email           │     │ timestamp       │     │ channels        │
+│ phone_number    │     │ source_ip       │     │ recipients      │
+│ whatsapp_number │     │ user_id (FK)    │     │ status          │
+│ role            │     │ action_type     │     │ retry_count     │
+└─────────────────┘     │ severity        │     └─────────────────┘
+                        │ classification  │
+                        │ message         │
+                        │ context (JSONB) │
+                        │ hash            │
+                        │ previous_hash   │
+                        └─────────────────┘
+
+┌─────────────────┐
+│classification_  │
+│     rules       │
+├─────────────────┤
+│ id              │
+│ name            │
+│ classification  │
+│ patterns (JSONB)│
+│ priority        │
+│ is_active       │
+└─────────────────┘
