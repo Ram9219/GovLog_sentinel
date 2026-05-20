@@ -39,7 +39,7 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'phone_number' => ['required', 'string', 'max:20'],
+            'phone' => ['required', 'string', 'max:20'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -47,7 +47,8 @@ class RegisteredUserController extends Controller
         $request->session()->put('registration_data', [
             'name' => $request->name,
             'email' => $request->email,
-            'phone_number' => $request->phone_number,
+            'phone' => $request->phone,
+            'role' => 'viewer',
             'password' => $request->password,
         ]);
 
@@ -98,7 +99,8 @@ class RegisteredUserController extends Controller
         $user = User::create([
             'name' => $registrationData['name'],
             'email' => $email,
-            'phone_number' => $registrationData['phone_number'],
+            'phone' => $registrationData['phone'],
+            'role' => $registrationData['role'],
             'password' => Hash::make($registrationData['password']),
             'email_verified_at' => now(), // Mark email as verified since OTP confirmed it
         ]);

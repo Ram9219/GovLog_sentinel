@@ -48,10 +48,10 @@
         </div>
 
         <div>
-            <x-input-label for="phone_number" :value="__('Phone Number')" />
-            <x-text-input id="phone_number" name="phone_number" type="tel" class="mt-1 block w-full" :value="old('phone_number', $user->phone_number)" autocomplete="tel" placeholder="+91XXXXXXXXXX" />
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Used for SMS alerts and account contact.</p>
-            <x-input-error class="mt-2" :messages="$errors->get('phone_number')" />
+            <x-input-label for="phone" :value="__('Phone Number')" />
+            <x-text-input id="phone" name="phone" type="tel" class="mt-1 block w-full" :value="old('phone', $user->phone)" autocomplete="tel" placeholder="+91XXXXXXXXXX" />
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Used for SMS alerts and contact verification.</p>
+            <x-input-error class="mt-2" :messages="$errors->get('phone')" />
         </div>
 
         <div class="flex items-center gap-4">

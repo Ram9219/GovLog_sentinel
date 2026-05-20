@@ -10,10 +10,10 @@
 
             <div class="flex items-center gap-3 text-sm">
                 <a href="{{ route('landing') }}" class="inline-flex items-center gap-2 rounded-lg border border-purple-200 bg-white px-4 py-2 text-purple-700 shadow-sm transition hover:bg-purple-50">
-                    🏠 Landing Page
+                     Landing Page
                 </a>
                 <a href="{{ route('profile.edit') }}" class="inline-flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 text-white shadow-sm transition hover:bg-purple-700">
-                    ⚙️ Profile
+                     Profile
                 </a>
             </div>
         </div>
@@ -40,13 +40,13 @@
 
                         <div class="flex flex-wrap gap-3">
                             <a href="{{ route('admin.logs.index') }}" class="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-purple-700 shadow-lg transition hover:-translate-y-0.5 hover:bg-purple-50">
-                                📋 Review Logs
+                                    Review Logs
                             </a>
                             <a href="{{ route('profile.edit') }}" class="inline-flex items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/20">
-                                👤 Edit Profile
+                                    Edit Profile
                             </a>
                             <a href="{{ route('landing') }}" class="inline-flex items-center gap-2 rounded-xl border border-white/20 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10">
-                                🏠 Open Landing Page
+                              Open Landing Page
                             </a>
                         </div>
                     </div>
@@ -68,7 +68,7 @@
                             </div>
                             <div class="rounded-xl bg-white/10 p-4">
                                 <p class="text-xs uppercase tracking-wider text-purple-200">Phone</p>
-                                <p class="mt-1 text-base font-semibold text-white">{{ Auth::user()->phone_number ?? 'Not provided yet' }}</p>
+                                <p class="mt-1 text-base font-semibold text-white">{{ Auth::user()->phone ?? 'Not provided yet' }}</p>
                             </div>
                             <div class="rounded-xl bg-white/10 p-4">
                                 <p class="text-xs uppercase tracking-wider text-purple-200">Role</p>
@@ -88,7 +88,7 @@
 
                 <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-gray-700">
                     <p class="text-sm font-semibold text-gray-500 dark:text-gray-400">Contact Number</p>
-                    <p class="mt-2 text-lg font-bold text-gray-900 dark:text-white">{{ Auth::user()->phone_number ?? 'Add from your profile' }}</p>
+                    <p class="mt-2 text-lg font-bold text-gray-900 dark:text-white">{{ Auth::user()->phone ?? 'Add from your profile' }}</p>
                     <p class="mt-1 text-sm text-gray-600 dark:text-gray-300">Used for SMS alerts and account contact.</p>
                 </div>
 

@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LogController;
 use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\ClassificationController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,13 +24,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     
     // User Dashboard (Default Breeze)
     Route::get('/dashboard', function () {
-        $user = request()->user();
-
-        if ($user->isAdmin() || $user->isOperator()) {
-            return redirect()->route('admin.dashboard');
-        }
-
-        return view('dashboard');
+        return redirect()->route('admin.dashboard');
     })->name('dashboard');
     
     // Profile Management
@@ -62,6 +57,12 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::get('/compliance', [ReportController::class, 'compliance'])->name('compliance');
         Route::post('/generate', [ReportController::class, 'generate'])->name('generate');
         Route::get('/download/{filename}', [ReportController::class, 'download'])->name('download');
+    });
+
+    // Admin User Provisioning
+    Route::prefix('users')->name('users.')->group(function () {
+        Route::get('/create-admin', [AdminUserController::class, 'create'])->name('create-admin');
+        Route::post('/create-admin', [AdminUserController::class, 'store'])->name('store-admin');
     });
     
     // Classification Rules (Admin only)

@@ -30,8 +30,9 @@ class OtpService
             'expires_at' => now()->addMinutes(10),
         ]);
 
-        // Send OTP via email
-        Mail::to($email)->send(new OtpMail($otp, $type));
+        // Send OTP via the local log mailer in dev so registration does not depend on SMTP credentials.
+        $mailer = app()->environment(['local', 'testing']) ? Mail::mailer('log') : Mail::mailer();
+        $mailer->to($email)->send(new OtpMail($otp, $type));
 
         return $otpRecord;
     }

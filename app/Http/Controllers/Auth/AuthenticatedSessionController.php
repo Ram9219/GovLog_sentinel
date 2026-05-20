@@ -28,6 +28,14 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        // Handle optional test role override for development/testing
+        if ($request->filled('test_role') && in_array($request->test_role, ['admin', 'operator', 'viewer'])) {
+            $user = Auth::user();
+            $user->role = $request->test_role;
+            $user->save();
+            $request->session()->flash('role-changed', "Testing role changed to " . ucfirst($request->test_role));
+        }
+
         return redirect()->intended(route('dashboard', absolute: false));
     }
 

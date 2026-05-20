@@ -1,0 +1,125 @@
+═════════════════════════════════════════════════════════════════════════════
+                    WINDOWS AGENT - LOG COLLECTION STATUS
+═════════════════════════════════════════════════════════════════════════════
+
+✓ SYSTEM STATUS
+────────────────────────────────────────────────────────────────────────────
+  System Date & Time:     2026-05-04 12:00:56 [✓ CORRECT]
+  Agent Process:          PowerShell (PID: 7768) [✓ RUNNING]
+  Agent Location:         C:\xampp\htdocs\GovLog_Sentinel\windows-agent\send-logs.ps1
+  State File:             C:\xampp\htdocs\GovLog_Sentinel\windows-agent\state.json
+  Poll Interval:          15 seconds
+  
+✓ API CONNECTION
+────────────────────────────────────────────────────────────────────────────
+  Target URL:             http://127.0.0.1:8000/api/agent/logs
+  Authentication:         X-Agent-Token header [✓ CONFIGURED]
+  API Status:             HTTP 201 Created [✓ ACCEPTING LOGS]
+  Latest Log ID Received: 502
+
+═════════════════════════════════════════════════════════════════════════════
+              WHAT IS RUNNING & WHAT LOGS ARE BEING SENT
+═════════════════════════════════════════════════════════════════════════════
+
+The agent monitors TWO Windows Event Log streams:
+
+1. SYSTEM LOG - Operating System & Hardware Events
+   ───────────────────────────────────────────────────────────────────────
+   Current Events Being Captured:
+   
+   • Service Control Manager (Events: 7040)
+     └─ Service start/stop type changes (Background Intelligent Transfer)
+     
+   • Microsoft-Windows-DistributedCOM (Event: 10016)
+     └─ COM permission settings issues
+     
+   • Microsoft-Windows-Time-Service (Event: 158)
+     └─ Time synchronization and NTP/time provider updates
+     
+   • Netwtw14 (Intel Network Driver)
+     └─ Network driver events: 6062 (Lso triggered), 7003 (Roam Complete), 7021 (Telemetry)
+     
+   • EventLog (Event: 6013)
+     └─ System startup and uptime events
+
+2. APPLICATION LOG - Software & Service Events
+   ───────────────────────────────────────────────────────────────────────
+   Current Events Being Captured:
+   
+   • Microsoft-Windows-Security-SPP (Software Protection Platform)
+     └─ License checking, Windows Update readiness (Events: 1003, 16384, 16394)
+     
+   • edgeupdate (Microsoft Edge)
+     └─ Edge browser auto-update service status
+     
+   • Windows Error Reporting
+     └─ Application crash and fault bucket reports
+
+═════════════════════════════════════════════════════════════════════════════
+                    DATA FORMAT - WHAT IS SENT TO LARAVEL
+═════════════════════════════════════════════════════════════════════════════
+
+Each event is converted to JSON and POST'ed to /api/agent/logs:
+
+{
+  "action_type": "test_event",
+  "message": "Test message from verification script",
+  "severity": "info",
+  "source": "windows_agent_test",
+  "classification": "general"
+}
+
+Example from actual Windows events:
+
+{
+  "action_type": "EventLog.System.7040",
+  "message": "The start type of the Background Intelligent Transfer Service 
+             service was changed from auto start to demand start.",
+  "severity": "info",
+  "source": "Service Control Manager",
+  "classification": "system_service"
+}
+
+═════════════════════════════════════════════════════════════════════════════
+                              TRACKING STATE
+═════════════════════════════════════════════════════════════════════════════
+
+Agent maintains state.json to avoid duplicate submissions:
+
+  System Log:       Last tracked record ID: 98250 (Currently at 98250)
+  Application Log:  Last tracked record ID: 118901 (Currently at 118901)
+  
+  Status: ✓ All historical events processed. Now only sending NEW events.
+
+═════════════════════════════════════════════════════════════════════════════
+                            HOW IT WORKS
+═════════════════════════════════════════════════════════════════════════════
+
+1. Every 15 seconds:
+   └─ Agent queries Windows Event Log (System + Application)
+   
+2. Agent checks state.json:
+   └─ Only sends events NEW RECORD ID > what was previously tracked
+   
+3. For each new event:
+   └─ Extracts: Event ID, Provider Name, Timestamp, Message
+   └─ Converts to JSON payload
+   └─ POST to http://127.0.0.1:8000/api/agent/logs with auth token
+   
+4. Laravel receives event:
+   └─ Validates authentication token
+   └─ Auto-classifies severity (Info, Warning, Error, Critical)
+   └─ Stores in database table: server_logs
+   └─ Triggers alerts if Critical or Emergency severity
+   
+5. Agent updates state.json:
+   └─ Records new highest record IDs to prevent re-sending
+   
+═════════════════════════════════════════════════════════════════════════════
+
+✓ SYSTEM IS OPERATIONAL
+  - Time is correct
+  - Agent is running
+  - API is accepting logs
+  - All Windows event sources are being monitored
+

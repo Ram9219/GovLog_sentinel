@@ -10,28 +10,10 @@
     <form method="POST" action="{{ route('login') }}" class="space-y-5">
         @csrf
 
-        <div>
-            <label for="role" class="block text-sm font-medium text-gray-700 mb-2">
-                👥 Login As
-            </label>
-            <select
-                id="role"
-                name="role"
-                class="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition bg-white"
-                required
-            >
-                <option value="" disabled {{ old('role') ? '' : 'selected' }}>Select your role</option>
-                <option value="admin" @selected(old('role') === 'admin')>Admin</option>
-                <option value="operator" @selected(old('role') === 'operator')>Operator</option>
-                <option value="viewer" @selected(old('role') === 'viewer')>Viewer</option>
-            </select>
-            <x-input-error :messages="$errors->get('role')" class="mt-2 text-red-600 text-sm" />
-        </div>
-
         <!-- Email Address -->
         <div>
             <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
-                📧 Email Address
+                 Email Address
             </label>
             <x-text-input 
                 id="email" 
@@ -50,7 +32,7 @@
         <!-- Password -->
         <div>
             <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
-                🔑 Password
+                 Password
             </label>
             <x-text-input 
                 id="password" 
@@ -62,6 +44,24 @@
                 placeholder="••••••••" 
             />
             <x-input-error :messages="$errors->get('password')" class="mt-2 text-red-600 text-sm" />
+        </div>
+
+        <!-- Test Role Selection (Optional) -->
+        <div>
+            <label for="test_role" class="block text-sm font-medium text-gray-700 mb-2">
+                 Test Role Override (Optional)
+            </label>
+            <select 
+                id="test_role" 
+                name="test_role" 
+                class="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition bg-white"
+            >
+                <option value="" selected>-- Use registered role --</option>
+                <option value="admin"> Admin</option>
+                <option value="operator"> Operator</option>
+                <option value="viewer"> Viewer</option>
+            </select>
+            <p class="mt-1 text-xs text-gray-500">For testing: temporarily override your role after login. Leave empty to use your actual registered role.</p>
         </div>
 
         <!-- Remember Me -->
@@ -85,7 +85,7 @@
 
         <!-- Login Button -->
         <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white font-semibold py-2.5 rounded-lg hover:from-purple-700 hover:to-purple-800 transition shadow-lg hover:shadow-xl">
-            🔓 Sign In
+             Sign In
         </button>
     </form>
 
@@ -112,7 +112,7 @@
     <!-- Info Box -->
     <div class="mt-6 p-3 bg-blue-50 border border-blue-200 rounded-lg">
         <p class="text-xs text-blue-700">
-            <span class="font-semibold">💡 Tip:</span> Choose the role that matches your account before signing in.
+            <span class="font-semibold"> Tip:</span> Use your government-issued email address for login.
         </p>
     </div>
 </x-guest-layout>

@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'log_agent' => [
+        'token' => env('LOG_AGENT_TOKEN'),
+    ],
+
 ];

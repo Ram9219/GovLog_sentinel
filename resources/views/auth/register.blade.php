@@ -4,6 +4,15 @@
         <p class="text-gray-600 text-sm">Join the GovLog Sentinel system for secure log management</p>
     </div>
 
+    <div class="mb-6 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+        <p class="text-sm text-blue-800">
+            New accounts are created as <span class="font-semibold">Viewer</span> by default.
+        </p>
+        <p class="mt-1 text-xs text-blue-700">
+            Viewer access is read-only. An administrator can grant higher access later if needed.
+        </p>
+    </div>
+
     <form method="POST" action="{{ route('register') }}" class="space-y-4">
         @csrf
 
@@ -62,7 +71,22 @@
             <p class="mt-1 text-xs text-gray-500">Use the number where SMS alerts should be delivered.</p>
             <x-input-error :messages="$errors->get('phone')" class="mt-2 text-red-600 text-sm" />
         </div>
+        <input type="hidden" name="role" value="viewer">
 
+        <!-- Account Role -->
+        <div>
+            <label for="role" class="block text-sm font-medium text-gray-700 mb-2">
+                👥 Account Role
+            </label>
+            <x-text-input 
+                id="role" 
+                class="block w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-600" 
+                type="text" 
+                value="Viewer (default for new registrations)" 
+                disabled
+            />
+            <p class="mt-1 text-xs text-gray-500">New registrations are read-only Viewer accounts by default.</p>
+        </div>
         <!-- Password -->
         <div>
             <label for="password" class="block text-sm font-medium text-gray-700 mb-2">

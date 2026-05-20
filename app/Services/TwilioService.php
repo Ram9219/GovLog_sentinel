@@ -19,7 +19,7 @@ class TwilioService
         $this->fromNumber = config('twilio.phone_number');
     }
 
-    public function sendSms($to, $message, $isEmergency = false)
+    public function sendSms($to, $message, $isEmergency = false, bool $allowTrialOverride = true)
     {
         // Basic validation: ensure credentials exist before attempting network call
         $sid = config('twilio.sid');
@@ -35,7 +35,7 @@ class TwilioService
 
         // If trial mode is enabled and a verified number is configured, use it. Do NOT overwrite
         // the provided $to with null when verified_number is missing.
-        if (config('twilio.trial_mode') && !empty(config('twilio.verified_number'))) {
+        if ($allowTrialOverride && config('twilio.trial_mode') && !empty(config('twilio.verified_number'))) {
             $to = config('twilio.verified_number');
         }
 

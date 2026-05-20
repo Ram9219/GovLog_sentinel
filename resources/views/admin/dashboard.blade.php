@@ -25,6 +25,9 @@
                         <a href="{{ route('admin.logs.index') }}" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900">Logs</a>
                         <a href="{{ route('admin.logs.critical') }}" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900">Critical Alerts</a>
                         <a href="{{ route('admin.reports.audit') }}" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900">Reports</a>
+                        @if(auth()->user()->isAdmin())
+                            <a href="{{ route('admin.users.create-admin') }}" class="px-3 py-2 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700">Create Admin</a>
+                        @endif
                     </div>
                 </div>
                 <div class="flex items-center space-x-3">
@@ -40,6 +43,12 @@
 
     <!-- Main Content -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        @if(session('status'))
+            <div class="mb-6 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800">
+                {{ session('status') }}
+            </div>
+        @endif
+
         <!-- Stats Grid -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <div class="bg-white rounded-lg shadow p-6 stat-card">

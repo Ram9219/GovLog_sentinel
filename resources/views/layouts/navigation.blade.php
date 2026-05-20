@@ -23,6 +23,10 @@
                         <x-nav-link :href="route('admin.logs.index')" :active="request()->routeIs('admin.logs.*')" class="text-white">
                             📋 Logs
                         </x-nav-link>
+                    @else
+                        <x-nav-link :href="route('viewer.logs.index')" :active="request()->routeIs('viewer.logs.*')" class="text-white">
+                            📋 Logs
+                        </x-nav-link>
                     @endif
                 </div>
             </div>
@@ -101,6 +105,10 @@
             </x-responsive-nav-link>
             @if(Auth::user()->role === 'admin' || Auth::user()->role === 'operator')
                 <x-responsive-nav-link :href="route('admin.logs.index')" :active="request()->routeIs('admin.logs.*')" class="text-white">
+                    📋 {{ __('Logs') }}
+                </x-responsive-nav-link>
+            @else
+                <x-responsive-nav-link :href="route('viewer.logs.index')" :active="request()->routeIs('viewer.logs.*')" class="text-white">
                     📋 {{ __('Logs') }}
                 </x-responsive-nav-link>
             @endif
